@@ -1,8 +1,8 @@
 import os
 import sys
 
-from . import ioutils
-from . import ucmd
+from pyutils import ioutils
+from pyutils import ucmd
 from .filebuilder import FileBuilder
 from .testresult import UTResult
 

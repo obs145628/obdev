@@ -1,18 +1,13 @@
 import os
 
-from . import ucmd
-from . import ioutils
+import pyutils.config as conf
+from pyutils import ucmd
+from pyutils import ioutils
 
 DEFAULT_TYPES = {
     'data': ['.data'],
     'app': ['.bin', '.py'],
 }
-
-CC='clang'
-CXX='clang++'
-
-CC_FLAGS = ['-Wall', '-Wextra', '-Werror', '-std=c99']
-CXX_FLAGS = ['-Wall', '-Wextra', '-Werror', '-std=c++17']
 
 '''
 Build files using a 1 to 1 mapping: input file => output file
@@ -127,7 +122,9 @@ class GccBuilder:
         self.in_exts = ['.c']
 
     def build(self, in_path, out_path):
-        ucmd.run_cmd([CC, in_path, '-o', out_path] + CC_FLAGS, exp0=True)
+        cc = conf.get('filebuilder-cc')
+        cc_flags = conf.get('filebuilder-cc-flags')
+        ucmd.run_cmd([cc, in_path, '-o', out_path] + cc_flags, exp0=True)
 
 class GppBuilder:
     def __init__(self, conf):
@@ -136,7 +133,9 @@ class GppBuilder:
         self.in_exts = ['.cc', '.cpp']
 
     def build(self, in_path, out_path):
-        ucmd.run_cmd([CXX, in_path, '-o', out_path] + CXX_FLAGS, exp0=True)
+        cxx = conf.get('filebuilder-cxx')
+        cxx_flags = conf.get('filebuilder-cxx-flags')
+        ucmd.run_cmd([cxx, in_path, '-o', out_path] + cxx_flags, exp0=True)
 
 class DataBuilder:
     def __init__(self, conf):

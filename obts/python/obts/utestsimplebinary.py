@@ -1,4 +1,4 @@
-from . import ucmd
+from pyutils import ucmd
 from .testresult import UTResult
 
 FMT_OUTPUT=('''

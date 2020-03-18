@@ -1,6 +1,6 @@
 import os
 
-from . import ioutils
+from pyutils import ioutils
 
 
 '''

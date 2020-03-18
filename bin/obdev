@@ -13,13 +13,16 @@ ts: forward args to obts (more infos in obts/python/obts/app.py)
 import os
 import sys
 
-OBCONTROL_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../obcontrol/python"))
-sys.path.append(OBCONTROL_DIR)
-import obcontrol.app
+UTILS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../utils"))
+sys.path.append(UTILS_DIR)
 
 OBTS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../obts/python"))
 sys.path.append(OBTS_DIR)
 import obts.app
+
+OBCONTROL_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../obcontrol/python"))
+sys.path.append(OBCONTROL_DIR)
+import obcontrol.app
 
 
 def main(args):

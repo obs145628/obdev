@@ -1,7 +1,8 @@
 import os
 import sys
 
-from . import ioutils
+import pyutils.config as conf
+from pyutils import ioutils
 from .testresult import TSResult, UTResult
 from .filesfinder import FilesFinder, FilterType
 from .cliprinter import CLIPrinter
@@ -22,10 +23,26 @@ It uses file/dir names matching and conf files to figure out how to run tests
 
 Global config file:
 The global config file (at <root>/obdev.config.json) contains many properties used by TSAuto:
-- output_dir: Same as cons param, but cons param as precedence
-- build_dir: Same as cons param, but cons param as precedence
-- binary_dir: Same as cons param, but cons param as precedence
-All paths are relative to <root>
+
+- build_dir: 
+Same as cons param, but cons param as precedence. Relative to <root>
+
+- binary_dir: 
+Same as cons param, but cons param as precedence. Relative to <root>
+
+- filebuilder-cc (<string>, default="clang")
+C Compiler used to build binary files
+
+- filebuilder-cxx (<string>, default="clang++")
+C Compiler used to build binary files
+
+- filebuilder-cc-flags (<string[]>, default = ['-Wall', '-Wextra', '-Werror', '-std=c99'])
+C Compiler flags used to build binary files
+
+- filebuilder-cxx-flags (<string[]>, default = ['-Wall', '-Wextra', '-Werror', '-std=c++17'])
+C++ Compiler flags used to build binary files
+
+
 
 Unit Test Rules:
 
@@ -86,20 +103,15 @@ class TSAuto:
         self.out_dir = os.path.abspath(output_dir)
         self.build_dir = None if build_dir is None else os.path.abspath(self.build_dir)
         self.binary_dir = None if binary_dir is None else os.path.abspath(self.binary_dir)
-
-        self._read_config()
-        
         self.search_dirs = [os.path.abspath('.')]
-        if self.build_dir is not None:
-            self.search_dirs.append(self.build_dir)
-        if self.binary_dir is not None:
-            self.search_dirs.append(self.binary_dir)
 
     '''
     Run the whole testsuite.
     Returns 0 if all tests passed, 1 otherwhise
     '''
     def run(self):
+        conf.push_file(os.path.join(self.root, './obdev.config.json'))
+        self._read_config()
         
         self._run_standalone_bins()
         self._run_dirs()
@@ -110,22 +122,23 @@ class TSAuto:
         fd = FilesDumper(self.ts, self.out_dir)
         fd.dump()
 
-        
+        conf.pop_file()        
         
         return 0 if valid else 1
 
     def _read_config(self):
-        json_path = os.path.join(self.root, './obdev.config.json')
-        if not os.path.isfile(json_path):
-            return
-        conf = ioutils.read_file_json(json_path)
+        conf_binary_dir = conf.get('binary_dir')
+        conf_build_dir = conf.get('build_dir')
+        
+        if self.binary_dir is None and conf_binary_dir is not None:
+            self.binary_dir = os.path.join(self.root, conf_binary_dir)
+        if self.build_dir is None and conf_build_dir is not None:
+            self.build_dir = os.path.join(self.root, conf_build_dir)
 
-        if self.binary_dir is None and 'binary_dir' in conf:
-            self.binary_dir = os.path.join(self.root, conf['binary_dir'])
-        if self.build_dir is None and 'build_dir' in conf:
-            self.build_dir = os.path.join(self.root, conf['build_dir'])
-        if self.out_dir is None and 'output_dir' in conf:
-            self.out_dir = os.path.join(self.root, conf['output_dir'])
+        if self.build_dir is not None:
+            self.search_dirs.append(self.build_dir)
+        if self.binary_dir is not None:
+            self.search_dirs.append(self.binary_dir)
 
     def _run_standalone_bins(self):
         ff = FilesFinder()
