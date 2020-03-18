@@ -126,8 +126,6 @@ class TSAuto:
             self.build_dir = os.path.join(self.root, conf['build_dir'])
         if self.out_dir is None and 'output_dir' in conf:
             self.out_dir = os.path.join(self.root, conf['output_dir'])
-        
-        print(conf)
 
     def _run_standalone_bins(self):
         ff = FilesFinder()

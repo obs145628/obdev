@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+
+'''
+Usage
+
+obdev: <task> ...
+
+task can be any of:
+control: forward args to obcontrol (more infos in obcontrol/python/obcontrol/app.py)
+ts: forward args to obts (more infos in obts/python/obts/app.py)
+'''
+
+import os
+import sys
+
+OBCONTROL_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../obcontrol/python"))
+sys.path.append(OBCONTROL_DIR)
+import obcontrol.app
+
+OBTS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../obts/python"))
+sys.path.append(OBTS_DIR)
+import obts.app
+
+
+def main(args):
+    if len(args) == 0:
+        sys.stderr.write('obdev: Missing task argument\n')
+        return 1
+
+    task = args[0]
+    args = args[1:]
+
+    if task == 'control':
+        return obcontrol.app.main(args)
+    elif task == 'ts':
+        return obts.app.main(args)
+    else:
+        sys.stderr.write('Unknown task {}\n'.format(task))
+        return 1
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1:]))
+    
+    
