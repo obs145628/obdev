@@ -110,7 +110,7 @@ class TSAuto:
     Returns 0 if all tests passed, 1 otherwhise
     '''
     def run(self):
-        conf.push_file(os.path.join(self.root, './obdev.config.json'))
+        cf_load = conf.push_file(os.path.join(self.root, './obdev.config.json'))
         self._read_config()
         
         self._run_standalone_bins()
@@ -122,7 +122,8 @@ class TSAuto:
         fd = FilesDumper(self.ts, self.out_dir)
         fd.dump()
 
-        conf.pop_file()        
+        if cf_load:
+            conf.pop_file()        
         
         return 0 if valid else 1
 

@@ -27,10 +27,11 @@ At the bottom is default config
 
 def push_file(path):
     if not os.path.isfile(path):
-        return
+        return False
     with open(path, 'r') as f:
         conf =json.load(f)
     _conf.append(conf)
+    return True
 
 
 def pop_file():
@@ -43,6 +44,6 @@ def get(key):
     for conf in _conf[::-1]:
         if key in conf:
             return conf[key]
-    return conf
+    return None
 
     
