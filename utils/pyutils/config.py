@@ -13,6 +13,7 @@ DEFAULT_CONF = {
     'filebuilder-cxx': 'clang++',
     'filebuilder-cc-flags': ['-Wall', '-Wextra', '-Werror', '-std=c99'],
     'filebuilder-cxx-flags': ['-Wall', '-Wextra', '-Werror', '-std=c++17'],
+    'bin-extensions': ['.bin'],
 }
 
 

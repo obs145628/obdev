@@ -142,9 +142,11 @@ class TSAuto:
             self.search_dirs.append(self.binary_dir)
 
     def _run_standalone_bins(self):
+        bin_exts = conf.get('bin-extensions')
+        
         ff = FilesFinder()
         ff.filter_begin_with("utest_", FilterType.File)
-        ff.filter_end_with(".bin", FilterType.File)
+        ff.filter_ext_is_any(bin_exts, FilterType.File)
         files, _ = ff.run(self.root)
         
         for f in files:

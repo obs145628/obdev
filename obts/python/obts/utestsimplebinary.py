@@ -1,3 +1,6 @@
+import os
+
+import pyutils.config as conf
 from pyutils import ucmd
 from .testresult import UTResult
 
@@ -21,9 +24,22 @@ class UTestSimpleBinary:
         self.name = name
         self.bin_path = bin_path
 
+    def get_cmd(self):
+        bp = self.bin_path
+        ext = os.path.splitext(bp)[1]
+        if ext == '.bin':
+            return [self.bin_path]
+        
+        runner = conf.get('run-app-custom-cmd-{}'.format(ext[1:]))
+        if not runner:
+            raise Exception('Cannot run binary {}: unknown format'.format(bp))
+
+        return [x.format(self.bin_path) for x in runner]
+
     # Run the test and add the result to ts
     def run(self):
-        ret, out, err = ucmd.run_cmd([self.bin_path])
+        cmd = self.get_cmd()
+        ret, out, err = ucmd.run_cmd(cmd)
         valid = ret == 0
         output = FMT_OUTPUT.format(ret, out.decode('ascii'), err.decode('ascii'))
         expected = 'Status code: 0'
@@ -35,7 +51,7 @@ class UTestSimpleBinary:
 
         ut = UTResult(
             name=self.name,
-            cmd=self.bin_path,
+            cmd=' '.join(cmd),
             valid=valid,
             status=ret,
             output=output,

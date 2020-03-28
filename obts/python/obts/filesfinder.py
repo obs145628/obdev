@@ -98,6 +98,11 @@ class FilesFinder:
         def fn(path, _): return os.path.basename(path).endswith(s)
         self.filter(fn, ftype)
 
+    # Check if the file extension is in `exts`
+    def filter_ext_is_any(self, exts, ftype):
+        def fn(path, _): return os.path.splitext(path)[1] in exts
+        self.filter(fn, ftype)
+        
 
     def _apply_filters(self, path, ftype):
         filters = None
