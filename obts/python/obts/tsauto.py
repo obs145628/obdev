@@ -4,7 +4,7 @@ import sys
 import pyutils.config as conf
 from pyutils import ioutils
 from .testresult import TSResult, UTResult
-from .filesfinder import FilesFinder, FilterType
+from pyutils.filesfinder import FilesFinder, FilterType
 from .cliprinter import CLIPrinter
 from .utestsimplebinary import UTestSimpleBinary
 from .utestdir import UTestDir

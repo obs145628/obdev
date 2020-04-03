@@ -20,6 +20,10 @@ OBTS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../obts/pyth
 sys.path.append(OBTS_DIR)
 import obts.app
 
+OBTODO_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../obtodo/python"))
+sys.path.append(OBTODO_DIR)
+import obtodo.app
+
 OBCONTROL_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../obcontrol/python"))
 sys.path.append(OBCONTROL_DIR)
 import obcontrol.app
@@ -37,6 +41,8 @@ def main(args):
         return obcontrol.app.main(args)
     elif task == 'ts':
         return obts.app.main(args)
+    elif task == 'todo':
+        return obtodo.app.main(args)
     else:
         sys.stderr.write('Unknown task {}\n'.format(task))
         return 1
