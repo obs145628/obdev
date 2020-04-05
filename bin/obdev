@@ -37,11 +37,11 @@ def main(args):
     task = args[0]
     args = args[1:]
 
-    if task == 'control':
+    if task == 'control' or task == 'c' or task == 'org':
         return obcontrol.app.main(args)
     elif task == 'ts':
         return obts.app.main(args)
-    elif task == 'todo':
+    elif task == 'todo' or task == '2do':
         return obtodo.app.main(args)
     else:
         sys.stderr.write('Unknown task {}\n'.format(task))
