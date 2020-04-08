@@ -12,10 +12,11 @@ List all projects with absolute path to main file
 
 `todo <projname>
 Run todo on all repos of a specific project
-If no project specified, run on all projects
-Print all tasks
+Write content to the correspondig project file
+then dump file project
 
-@todo be able to print for all projects
+If no project specified, run on all projects,
+then Print all tasks
 
 '''
 
@@ -51,14 +52,19 @@ def main_todo(args):
         new_tasks = [t for t in new_tasks if t.extra is None or t.extra not in all_proj_names or t.extra in proj_names]
         tasks += new_tasks
 
-    print('Looking for tasks in {}:'.format(', '.join(repos)))
     os = StringIO()
     todo_app.dump_tasks(tasks, os)
     todo_str = os.getvalue()
-    print(todo_str)
-
+        
     if len(args) > 0:
         projs[0].put_field('todo', todo_str)
+        projs[0].dump_file_content()
+        return 0
+
+    print('Looking for tasks in {}:'.format(', '.join(repos)))
+    print(todo_str)
+    return 0
+    
     
 
 def main_project(args):

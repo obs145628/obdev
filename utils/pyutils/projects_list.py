@@ -1,4 +1,5 @@
 import os
+import sys
 
 HOME_DIR = os.getenv("HOME")
 PROJECT_DIRS = ["lun", "rep"]
@@ -26,6 +27,13 @@ class Project:
 
 
         self.ready = True
+
+    '''
+    Print all file content to stdout
+    '''
+    def dump_file_content(self):
+        with open(self.main_file, 'rb') as f:
+            sys.stdout.buffer.write(f.read())
 
     def put_field(self, key, val):
         field_beg = '<<@OBDEV ### {} ####'.format(key)
