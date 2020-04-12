@@ -27,8 +27,8 @@ class UTestSimpleBinary:
     def get_cmd(self):
         bp = self.bin_path
         ext = os.path.splitext(bp)[1]
-        if ext == '.bin':
-            return [self.bin_path]
+        #if ext == '.bin':
+        #   return [self.bin_path]
         
         runner = conf.get('run-app-custom-cmd-{}'.format(ext[1:]))
         if not runner:

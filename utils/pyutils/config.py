@@ -14,6 +14,7 @@ DEFAULT_CONF = {
     'filebuilder-cc-flags': ['-Wall', '-Wextra', '-Werror', '-std=c99'],
     'filebuilder-cxx-flags': ['-Wall', '-Wextra', '-Werror', '-std=c++17'],
     'bin-extensions': ['.bin'],
+    'run-app-custom-cmd-bin': ['{}'],
 }
 
 
