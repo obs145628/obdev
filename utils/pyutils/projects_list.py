@@ -1,5 +1,6 @@
 import os
 import sys
+from datetime import datetime
 
 HOME_DIR = os.getenv("HOME")
 PROJECT_DIRS = ["lun", "rep"]
@@ -12,6 +13,7 @@ class Project:
         self.main_file = os.path.join(ORG_DIR, '{}.txt'.format(name))
         self.ready = False
         self.repos = []
+        self.time = None
 
     def prepare(self):
         if self.ready:
@@ -24,6 +26,13 @@ class Project:
 
                 if l.startswith('@repo'):
                     self.repos = [x.strip() for x in l.split()[1:]]
+                if l.startswith('@time'):
+                    try:
+                        time_date, time_dur = l[5:].strip().split()
+                        time_date = datetime.strptime(time_date, '%y/%m/%d')
+                        time_dur = int(time_dur[:-1])
+                        self.time = (time_date, time_dur)
+                    except Exception: pass
 
 
         self.ready = True
